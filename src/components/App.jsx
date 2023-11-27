@@ -1,19 +1,23 @@
-import React, { useState } from 'react';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 import { Container, Subtitle, Title } from './App.styled';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  addContacts,
+  deleteContacts,
+  filterContacts,
+} from 'redux/contacts/contacts.reducer';
 
 export const App = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(state => state.contactsStore.contacts);
-
-  const [filter, setFilter] = useState('');
+  const filter = useSelector(state => state.contactsStore.filter);
 
   const handleChange = e => {
-    const { value } = e.currentTarget;
-    setFilter(value);
+    const value = e.currentTarget.value;
+
+    dispatch(filterContacts(value));
   };
 
   const addsNewContact = newContact => {
@@ -26,11 +30,7 @@ export const App = () => {
       return;
     }
 
-    const addContactsAction = {
-      type: 'contacts/addContact',
-      payload: newContact,
-    };
-    dispatch(addContactsAction);
+    dispatch(addContacts(newContact));
   };
 
   const filterElements = contacts => {
@@ -40,11 +40,7 @@ export const App = () => {
   };
 
   const handleDeleteProduct = id => {
-    const deleteContactsAction = {
-      type: 'contacts/deleteContact',
-      payload: id,
-    };
-    dispatch(deleteContactsAction);
+    dispatch(deleteContacts(id));
   };
 
   const filteredContacts = filterElements(contacts);
