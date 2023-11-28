@@ -7,7 +7,7 @@ const contactsList = [
 ];
 
 const initialState = {
-  contacts: JSON.parse(localStorage.getItem('contactList')) || contactsList,
+  contacts: contactsList,
   filter: '',
 };
 
